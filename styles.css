@@ -43,9 +43,10 @@ body {
     padding: 5px;
 }
 
-#guess-button {
+#guess-button, #play-again-button {
     font-size: 18px;
     padding: 5px 10px;
+    margin-left: 10px;
 }
 
 #result {
@@ -53,4 +54,10 @@ body {
     font-size: 24px;
     font-weight: bold;
     color: green;
+}
+
+#validation-message {
+    color: red;
+    font-size: 18px;
+    margin-top: 10px;
 }

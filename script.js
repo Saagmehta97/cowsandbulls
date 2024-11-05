@@ -8,20 +8,31 @@ while (secretNumber.length < 4) {
     }
 }
 
+console.log(secretNumber); // Debugging Tip: Output the secret number to the console
+
 let attempts = 0;
 const maxAttempts = 7;
 
 const guessButton = document.getElementById('guess-button');
 const guessInput = document.getElementById('guess-input');
 const resultDiv = document.getElementById('result');
+const validationMessage = document.getElementById('validation-message');
+const playAgainButton = document.getElementById('play-again-button'); // New Play Again button
 
 // Function to handle the guess submission
 function submitGuess() {
     let guess = guessInput.value;
 
+    // Clear previous validation message
+    validationMessage.innerText = '';
+
     // Validate input
-    if (!/^[1-9]{4}$/.test(guess) || new Set(guess).size !== 4) {
-        alert('Please enter a 4-digit number with unique digits from 1-9.');
+    if (!/^[1-9]{4}$/.test(guess)) {
+        validationMessage.innerText = 'Please enter a 4-digit number using digits from 1-9.';
+        return;
+    }
+    if (new Set(guess).size !== 4) {
+        validationMessage.innerText = 'Digits must be unique. Please enter a number with no repeating digits.';
         return;
     }
 
@@ -79,7 +90,7 @@ function displayGuess(guess, result) {
     // Display the result next to the guess
     const resultElement = document.createElement('div');
     resultElement.className = 'result';
-    resultElement.innerText = `${result.cows}C ${result.bulls}B`;
+    resultElement.innerText = `${result.cows}🐮 ${result.bulls}🐂`;
     guessRow.appendChild(resultElement);
 
     guessesDiv.appendChild(guessRow);
@@ -88,4 +99,33 @@ function displayGuess(guess, result) {
 function endGame() {
     guessInput.disabled = true;
     guessButton.disabled = true;
+    playAgainButton.style.display = 'inline-block'; 
+}
+
+// Event listener for the "Play Again" button
+playAgainButton.addEventListener('click', resetGame);
+
+function resetGame() {
+    // Reset game variables
+    secretNumber = '';
+    while (secretNumber.length < 4) {
+        let digit = Math.floor(Math.random() * 9) + 1;
+        digit = digit.toString();
+        if (!secretNumber.includes(digit)) {
+            secretNumber += digit;
+        }
+    }
+    console.log(secretNumber); 
+
+    attempts = 0;
+    guessInput.disabled = false;
+    guessButton.disabled = false;
+    guessInput.value = '';
+    resultDiv.innerText = '';
+    validationMessage.innerText = '';
+    playAgainButton.style.display = 'none';
+
+    // Clear previous guesses
+    const guessesDiv = document.getElementById('guesses');
+    guessesDiv.innerHTML = '';
 }
